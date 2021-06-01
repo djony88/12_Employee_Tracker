@@ -1,0 +1,22 @@
+{
+  "name": "12_employee_tracker",
+  "version": "1.0.0",
+  "description": "Employee Tracker",
+  "main": "EmployeeTracker.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/djony88/12_Employee_Tracker.git"
+  },
+  "author": "Nikola",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/djony88/12_Employee_Tracker/issues"
+  },
+  "homepage": "https://github.com/djony88/12_Employee_Tracker#readme",
+  "dependencies": {
+    "inquirer": "^8.1.0"
+  }
+}
