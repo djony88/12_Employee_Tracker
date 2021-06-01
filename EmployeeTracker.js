@@ -190,6 +190,30 @@ function viewAllByRole(){
 
 // View all employees by manager
 
+function viewAllByMng() {
+    let mngArray = [];
+
+    promisemysql.createConnection(connectionProperties) .then((connect) => {
+        return connect.query("SELECT DISTINCT m.id, CONCAT(m.first_name, ' ', m.last_name) AS manager FROM employee e Inner JOIN employee m ON e.manager_id = m.id");
+    }) .then(function(manager) {
+        for (i=0; i < managers.length; i++){
+            managerArr.push(managers[i].manager);
+        }
+
+        return manager;
+    }) .then((manager) => {
+        inquirer.prompt({
+            name: "manager",
+            type: "list",
+            message: "Which manager would you like to search?",
+            choices: mngArray
+        }) .then((answer) => {
+            let managerID;
+
+            
+        })
+    })
+}
 
 // Add department
 
