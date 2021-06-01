@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/djony88/12_Employee_Tracker#readme",
   "dependencies": {
-    "inquirer": "^8.1.0"
+    "inquirer": "^8.1.0",
+    "mysql": "^2.18.1"
   }
 }
