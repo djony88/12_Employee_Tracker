@@ -138,7 +138,7 @@ function viewAllByDep() {
             depArray.push(value[i].name);
         }
     }) .then (() => {
-        inquirer.prompt( {
+        inquirer.prompt({
             name: "department",
             type: "list",
             message: "Which department would you like to search?",
@@ -161,10 +161,32 @@ function viewAllByDep() {
 function viewAllByRole(){
     let roleArray = [];
 
-    promisemysql.createConnection(connectionProperties);
-    
-}
+    promisemysql.createConnection(connectionProperties) .then((connect) => {
+        return connect.query('SELECT title FROM role');
+    }) .then(function(role) {
+        for (i=0; i < role.length; i++) {
+            roleArray.push(role[i].title);
+        }
+    }) .then(() => {
+        inquirer.prompt({
+            naem: "role",
+            type: "list",
+            message: "Which role would you like to search?",
+            choices: roleArray
+        }) .then((answer) => {
+            const query = `SELECT e.id AS ID, e.first_name AS 'First Name', e.last_name AS 'Last Name', role.title AS Title, department.name AS Department, role.salary AS Salary, concat(m.first_name, ' ' ,  m.last_name) AS Manager FROM employee e LEFT JOIN employee m ON e.manager_id = m.id INNER JOIN role ON e.role_id = role.id INNER JOIN department ON role.department_id = department.id WHERE role.title = '${answer.role}' ORDER BY ID ASC`;
+            connetion.query(query, (err, res) => {
+                if(err) return err;
 
+                console.log("\n");
+
+                console.table(res);
+
+                mainMenu();
+            });
+        });
+    });
+}
 
 // View all employees by manager
 
