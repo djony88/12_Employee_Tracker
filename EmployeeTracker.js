@@ -125,5 +125,77 @@ function viewAll() {
     });
 }
 
+// View all employees by department
+
+function viewAllByDep() {
+    let depArray = [];
+
+    promisemysql.createConnection(connectionProperties) .then((connect) => {
+        return connect.query('SELECT name FROM department');
+    }) .then(function(value) {
+        depQuery = value;
+        for(i=0; i < value.length; i++) {
+            depArray.push(value[i].name);
+        }
+    }) .then (() => {
+        inquirer.prompt( {
+            name: "department",
+            type: "list",
+            message: "Which department would you like to search?",
+            choices: depArray
+        }) .then((answer) => {
+            const query = `SELECT e.id AS ID, e.first_name AS 'First Name', e.last_name AS 'Last Name', role.title AS Title, department.name AS Department, role.salary AS Salary, concat(m.first_name, ' ' ,  m.last_name) AS Manager FROM employee e LEFT JOIN employee m ON e.manager_id = m.id INNER JOIN role ON e.role_id = role.id INNER JOIN department ON role.department_id = department.id WHERE department.name = '${answer.department}' ORDER BY ID ASC`;
+            connect.query(query, (err, res) => {
+                if(err) return err;
+                console.log("\n");
+
+                console.table(res);
+
+                mainMenu();
+            });
+        });
+    });
+}
+// View all employees by role
+
+function viewAllByRole(){
+    let roleArray = [];
+
+    promisemysql.createConnection(connectionProperties);
+    
+}
+
+
+// View all employees by manager
+
+
+// Add department
+
+
+// Add role
+
+
+// Add employee
+
+
+// Update employee manager
+
+
+// Update employee role
+
+
+// Update employee
+
+
+// Delete department
+
+
+// Delete role
+
+
+// Delete employee
+
+
+// View department budgets
 
 
