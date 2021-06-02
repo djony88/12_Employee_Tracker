@@ -668,6 +668,60 @@ function deleteRole(){
 
 // Delete employee
 
+function deleteEmp(){
+
+    let empArray = [];
+
+    promisemysql.createConnection(connectionProperties) .then((connect) => {
+
+        return connect.query("SELECT employee.id, concat(employee.first_name, ' ' ,  employee.last_name) AS employee FROM employee ORDER BY Employee ASC")
+    }) .then((employee) => {
+
+        for (i=0; i < employee.length; i++){
+            empArray.push(employee[i].employee);
+        }
+
+        inquirer.prompt([
+            {
+                name: "employee",
+                type: "list",
+                message: "Who would you like to delete?",
+                choices: empArray
+            },
+            {
+                name: "yes_no",
+                type: "list",
+                message: "Confirm deletion: ",
+                choices: ["NO", "YES"]
+            }
+        ]) .then((answer) => {
+
+            if(answer.yes_no == "YES") {
+                let employeeID;
+
+                for (i=0; i < employee.length; i++){
+                    if (answer.employee == employee[i].employee){
+                        employeeID = employee[i].id;
+                    }
+                }
+
+                connection.query(`DELETE FROM employee WHERE id=${employeeID};`, (err, res) => {
+
+                    if (err) return err;
+
+                    console.log(`\n Employee '${answer.employee}' Deleted...\n `);
+
+                    mainMenu();
+                });
+            }
+            else {
+                console.log(`\n Employee '${answer.employee}' not Deleted...\n `);
+
+                mainMenu();
+            }
+        });
+    });
+}
 
 // View department budgets
 
