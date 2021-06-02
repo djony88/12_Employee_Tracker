@@ -4,7 +4,7 @@ UCSD-SD-FSF-PT-03-2021-U-C-MW
 
 ## Github repository and application preview video links below
 
-[GitHub link]()
+[GitHub link](https://github.com/djony88/12_Employee_Tracker)
 
 [Preview video]()
 
@@ -32,7 +32,7 @@ Application gives you following options:
 
 ## Usage
 
-* In VS open terminal and run `node EmployeeTracker.js` to startapplication.
+* In Visual Studio open terminal and run `node EmployeeTracker.js` to startapplication.
 * Select by presing up and down arrows on your keyboard in a main menu to view all employees by department, manager or role, add department, role or employee, update manager or employee, delete department, role or employee and view budget by departments.
 * Follow prompts if presented.
 
