@@ -403,6 +403,61 @@ function addEmp() {
 
 // Update employee manager
 
+function updateMng() {
+    let empArray = [];
+
+    promisemysql.createConnection(connectionProperties) .then ((connect) => {
+        return connect.query("SELECT employee.id, concat(employee.first_name, ' ' ,  employee.last_name) AS Employee FROM employee ORDER BY Employee ASC");
+    }) .then ((employee) => {
+
+        for (i=0; i < employee.length; i++) {
+            empArray.push(employees[i].employee);
+        }
+
+        return employee;
+    }) .then((employee) => {
+
+        inquirer.prompt([
+            {
+                name: "employee",
+                type: "list",
+                message: "Which employee would you like to edit?",
+                choices: empArray
+            },
+            {
+                name: "manager",
+                type: "list",
+                message: "Who is their manager?",
+                choices: empArray
+            }
+        ]) .then((answer) => {
+
+            let employeeID;
+            let managerID;
+
+            for (i=0; i < employee.length; i++) {
+                if (answer.manager == employee[i].employee) {
+                    managerID = employee[i].id;
+                }
+            }
+
+            for (i=0; i < employee.length; i++){
+                if (answer.employee == employee[i].employee) {
+                    employeeID = employee[i].id;
+                }
+            }
+
+            connetion.query(`UPDATE employee SET manager_id = ${managerID} WHERE id = ${employeeID}`, (err, res) => {
+                if(err) return err;
+
+                console.log(`\n ${answer.employee} MANAGER UPDATED TO ${answer.manager}...\n`);
+
+                mainMenu();
+
+            });
+        });
+    });
+}
 
 // Update employee role
 
@@ -420,5 +475,4 @@ function addEmp() {
 
 
 // View department budgets
-
 
