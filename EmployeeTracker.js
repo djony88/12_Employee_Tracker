@@ -527,11 +527,73 @@ function updateEmpRole() {
     });
 }
 
-// Update employee
-
-
 // Delete department
 
+function deleteDep() {
+
+    let depArray = [];
+
+    promisemysql.createConnection(connectionProperties).then((connect) => {
+
+            return connect.query("SELECT id, name FROM department");
+        }) .then((department) => {
+            for (i=0; i < department.length; i++){
+                depArray.push(department[i].name);
+            }
+
+            inquirer.prompt([
+                {
+                    name: "delete",
+                    type: "list",
+                    message: "*** WARNING *** Deleting a department will delete all roles and employees associated with the department. Do you want to continue?",
+                    choices: ["NO", "YES"]
+                }
+            ]) .then((answer) => {
+                if (answer.delete === "NO") {
+
+                    mainMenu();
+                }
+            }) .then(() => {
+                inquirer.prompt([
+                {
+                    name: "depatrtment",
+                    type: "list",
+                    message: "Which department would you like to delete?",
+                    choices: deptArr
+                }, 
+                {
+                    name: "delete",
+                    type: "Input",
+                    message: "Type the EXACT department name to confirm deletion of the department: "
+                }
+    
+            ]) .then((answer) => {
+                if(answer.delete === answer.department){
+
+                    let deptID;
+                    for (i=0; i < department.length; i++){
+                        if (answer.department == department[i].name){
+                            deptID = department[i].id;
+                        }
+                    }
+
+                    connection.query(`DELETE FROM department WHERE id=${deptID};`, (err, res) => {
+                        if(err) return err;
+
+                        console.log(`\n Department '${answer.dept}' Deleted...\n `);
+
+                        mainMenu();
+                    });
+                }
+                else {
+                    console.log(`\n Department '${answer.dept}' Not deleted...\n `);
+
+                    mainMenu();
+                }
+            });
+        });
+    });
+}
 
 // Delete role
 
