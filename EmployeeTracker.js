@@ -461,6 +461,71 @@ function updateMng() {
 
 // Update employee role
 
+function updateEmpRole() {
+
+    let empArray = [];
+
+    let roleArray = [];
+
+    promisemysql.createConnection(connectionProperties) .then((connect) => {
+
+        return Promise.all([
+
+            connect.query('SELECT id, title FROM role ORDER BY title ASC'),
+            connect.query("SELECT employee.id, concat(employee.first_name, ' ' ,  employee.last_name) AS Employee FROM employee ORDER BY Employee ASC")
+        ]);
+    }) .then(([role, employee]) => {
+
+        for (i=0; i < role.length; i++){
+            roleArray.push(role[i].title);
+        }
+
+        for (i=0; i < employee.length; i++){
+            empArray.push(employee[i].employee);
+        }
+
+        return Promise.all([role, employee]);
+    }) .then(([role, employee]) => {
+        inquirer.prompt([
+            {
+                name: "employee",
+                type: "list",
+                message: "Who would you like to edit?",
+                choices: empArray
+            },
+            {
+                name: "role",
+                type: "list",
+                message: "What is new role?",
+                choices: roleArray
+            }
+        ]) .then((answer) => {
+
+            let roleID;
+            let employeeID;
+
+            for (i=0; i < role.length; i++){
+                if (answer.role == role[i].title){
+                    roleID = role[i].id;
+                }
+            }
+
+            for (i=0; i < employee.length; i++){
+                if (answer.employee == employee[i].employee){
+                    employeeID = employee[i].id;
+                }
+            }
+
+            connection.query(`UPDATE employee SET role_id = ${roleID} WHERE id = ${employeeID}`, (err, res) => {
+                if(err) return err;
+
+                console.log(`\n ${answer.employee} ROLE UPDATED TO ${answer.role}...\n `);
+
+                mainMenu();
+            });
+        });
+    });
+}
 
 // Update employee
 
