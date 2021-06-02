@@ -2,7 +2,7 @@
 
 const mysql = require("mysql");
 const inquirer = require("inquirer");
-const consoleTable = require("console.table");
+// const consoleTable = require("console.table");
 const promisemysql = require("promise-mysql");
 
 // Connection Properties
@@ -43,7 +43,7 @@ function mainMenu() {
             "Add employee.",
             "Update employee manager.",
             "Update employee role.",
-            "Update employee.",
+            // "Update employee.",
             "Delete department.",
             "Delete role.",
             "Delete employee.",
@@ -87,9 +87,9 @@ function mainMenu() {
                 updateEmpRole();
                 break;
 
-            case "Update employee.":
-                updateEmp();
-                break;
+            // case "Update employee.":
+            //     updateEmp();
+            //     break;
 
             case "Delete department.":
                 deleteDep();
@@ -145,7 +145,7 @@ function viewAllByDep() {
             choices: depArray
         }) .then((answer) => {
             const query = `SELECT e.id AS ID, e.first_name AS 'First Name', e.last_name AS 'Last Name', role.title AS Title, department.name AS Department, role.salary AS Salary, concat(m.first_name, ' ' ,  m.last_name) AS Manager FROM employee e LEFT JOIN employee m ON e.manager_id = m.id INNER JOIN role ON e.role_id = role.id INNER JOIN department ON role.department_id = department.id WHERE department.name = '${answer.department}' ORDER BY ID ASC`;
-            connect.query(query, (err, res) => {
+            connection.query(query, (err, res) => {
                 if(err) return err;
                 console.log("\n");
 
@@ -169,13 +169,13 @@ function viewAllByRole(){
         }
     }) .then(() => {
         inquirer.prompt({
-            naem: "role",
+            name: "role",
             type: "list",
             message: "Which role would you like to search?",
             choices: roleArray
         }) .then((answer) => {
             const query = `SELECT e.id AS ID, e.first_name AS 'First Name', e.last_name AS 'Last Name', role.title AS Title, department.name AS Department, role.salary AS Salary, concat(m.first_name, ' ' ,  m.last_name) AS Manager FROM employee e LEFT JOIN employee m ON e.manager_id = m.id INNER JOIN role ON e.role_id = role.id INNER JOIN department ON role.department_id = department.id WHERE role.title = '${answer.role}' ORDER BY ID ASC`;
-            connetion.query(query, (err, res) => {
+            connection.query(query, (err, res) => {
                 if(err) return err;
 
                 console.log("\n");
@@ -196,8 +196,8 @@ function viewAllByMng() {
     promisemysql.createConnection(connectionProperties) .then((connect) => {
         return connect.query("SELECT DISTINCT m.id, CONCAT(m.first_name, ' ', m.last_name) AS manager FROM employee e Inner JOIN employee m ON e.manager_id = m.id");
     }) .then(function(manager) {
-        for (i=0; i < managers.length; i++){
-            managerArr.push(managers[i].manager);
+        for (i=0; i < manager.length; i++){
+            mngArray.push(manager[i].manager);
         }
 
         return manager;
@@ -294,7 +294,7 @@ function addRole() {
             }
 
             connection.query(`INSERT INTO role (title, salary, department_id
-                VALUES ("${answer.roleTitle}", ${answer.salary}, ${deptID})`, (err, res) => {
+                VALUES ("${answer.roleTitle}", ${answer.salary}, ${depID})`, (err, res) => {
                     if(err) return err;
                     
                     console.log(`\n Role ${answer.roleTitle} Added...\n`);
@@ -411,7 +411,7 @@ function updateMng() {
     }) .then ((employee) => {
 
         for (i=0; i < employee.length; i++) {
-            empArray.push(employees[i].employee);
+            empArray.push(employee[i].employee);
         }
 
         return employee;
@@ -559,7 +559,7 @@ function deleteDep() {
                     name: "depatrtment",
                     type: "list",
                     message: "Which department would you like to delete?",
-                    choices: deptArr
+                    choices: depArray
                 }, 
                 {
                     name: "delete",
@@ -760,7 +760,7 @@ function viewBudget() {
         
         console.log("\n");
 
-        console.table(deptBudgetArr);
+        console.table(depBudgetArray);
 
         mainMenu();
     }))

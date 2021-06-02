@@ -79,5 +79,5 @@ INSERT INTO employee (id, first_name, last_name, role_id, manager_id)
 VALUE (10, "Tim", "Novak", 9, 1);
 
 INSERT INTO employee (id, first_name, last_name, role_id, manager_id)
-VALUE (11, "Nikola", "Stamenkovic", 7, 4);
+VALUE (11, "Nikola", "Stamenkovic", 7, 6);
 
