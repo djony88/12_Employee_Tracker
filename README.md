@@ -32,7 +32,7 @@ Application gives you following options:
 
 ## Usage
 
-* In Visual Studio open terminal and run `node EmployeeTracker.js` to startapplication.
+* In Visual Studio open terminal and run `node EmployeeTracker.js` to start application.
 * Select by presing up and down arrows on your keyboard in a main menu to view all employees by department, manager or role, add department, role or employee, update manager or employee, delete department, role or employee and view budget by departments.
 * Follow prompts if presented.
 
