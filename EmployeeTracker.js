@@ -725,3 +725,43 @@ function deleteEmp(){
 
 // View department budgets
 
+function viewBudget() {
+
+    promisemysql.createConnection(connectionProperties) .then((connect) => {
+
+        return Promise.all([
+
+            conn.query("SELECT department.name AS department, role.salary FROM employee e LEFT JOIN employee m ON e.manager_id = m.id INNER JOIN role ON e.role_id = role.id INNER JOIN department ON role.department_id = department.id ORDER BY department ASC"),
+            conn.query('SELECT name FROM department ORDER BY name ASC') 
+        ]);
+    }) .then((([depSalaries, department]) => {
+
+        let depBudgetArray = [];
+        let department;
+
+        for (d=0; d < department.length; d++){
+            let departmentBudget = 0;
+            
+            for (i=0; i < depSalaries.length; i++){
+                if (department[d].name == depSalaries[i].department){
+                    departmentBudget += depSalaries[i].salary;
+                }
+            }
+
+            department = 
+            {
+                Department: department[d].name,
+                Budget: departmentBudget
+            }
+
+            depBudgetArray.push(department);
+
+        }
+        
+        console.log("\n");
+
+        console.table(deptBudgetArr);
+
+        mainMenu();
+    }))
+}
