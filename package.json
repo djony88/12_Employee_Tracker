@@ -17,7 +17,9 @@
   },
   "homepage": "https://github.com/djony88/12_Employee_Tracker#readme",
   "dependencies": {
+    "console.table": "^0.10.0",
     "inquirer": "^8.1.0",
-    "mysql": "^2.18.1"
+    "mysql": "^2.18.1",
+    "promise-mysql": "^5.0.3"
   }
 }
