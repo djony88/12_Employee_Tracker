@@ -307,6 +307,99 @@ function addRole() {
 
 // Add employee
 
+function addEmp() {
+    let roleArray = [];
+    let mngArray = [];
+
+    promisemysql.createConnection(connectionProperties) .then((connect) => {
+        return Promise.all([
+            connect.query('SELECT id, title FROM role ORDER BY title ASC'),
+            connect.query("SELECT employee.id, concat(employee.first_name, ' ' ,  employee.last_name) AS Employee FROM employee ORDER BY Employee ASC")
+        ]);
+    }) .then(([role, manager]) => {
+
+        for(i=0; i <role.length; i++) {
+            roleArray.push(role[i].title);
+        }
+
+        for(i=0; i <manager.length; i++) {
+            mngArray.push(manager[i].employee);
+        }
+
+        return Promise.all([role, manager]);
+    }) .then(([role, manager]) => {
+
+        mngArray.unshift('--');
+
+        inquirer.prompt([
+            {
+                name: "firstName",
+                type: "input",
+                message: "First name: ",
+                validate: function(input) {
+                    if (input === "") {
+                        console.log("!!!REQUIRED INPUT!!!");
+                        return false;
+                    }
+                    else{
+                        return true;
+                    }
+                }
+            },
+            {
+                name: "lastName",
+                type: "input",
+                message: "Last name: ",
+                validate: function(input) {
+                    if (input === "") {
+                        console.log("!!!REQUIRED INPUT!!!");
+                        return false;
+                    }
+                    else{
+                        return true;
+                    }
+                }
+            },
+            {
+                name: "role",
+                type: "list",
+                message: "What is their role?",
+                choices: roleArray
+            },
+            {
+                name: "manager",
+                type: "list",
+                message: "Who is their manager?",
+                choices: mngArray 
+            }
+        ]) .then((answer) => {
+            let roleID;
+
+            let managerID = null;
+
+            for (i=0; i < role.length; i++) {
+                if (answer.role == role[i].title) {
+                    roleID = role[i].id;
+                }
+            }
+
+            for (i=0; i <manager.length; i++) {
+                if (answer.manager == manager[i].employee) {
+                    managerID = manager[i].id;
+                }
+            }
+
+            connetion.query(`INSERT INTO employee (first_name, last_name, role_id, manager_id)
+            VALUES ("${answer.firstName}", "${answer.lastName}", ${roleID}, ${managerID})`, (err, res) => {
+                if (err) return err;
+
+                console.log(`\n Employee ${answer.firstName} ${answer.lastName} Added...\n `);
+
+                mainMenu();
+            });
+        });
+    });
+}
 
 // Update employee manager
 
