@@ -24,16 +24,23 @@ Application gives you following options:
 * Delete department, role or employee.
 * Review salary budgets for all departments.
 
-## Instalation
+# Instalation
 
 * To install this application you will need MySQLWorkbench and Visual Studio.
 * In Visual Studio (after opening application folder) open terminal run `npm install` to install all dependencies.
 * Open MySQLWorkbench and run `schema.sql` and `seeds.sql`.
 
-## Usage
+# Usage
 
 * In Visual Studio open terminal and run `node EmployeeTracker.js` to start application.
 * Select by presing up and down arrows on your keyboard in a main menu to view all employees by department, manager or role, add department, role or employee, update manager or employee, delete department, role or employee and view budget by departments.
 * Follow prompts if presented.
+
+![Main Menu](.\assets\img\mainMenu.PNG)
+
+![First Selection](.\assets\img\firstSelected.PNG)
+
+![View Budget](.\assets\img\viewBudget.PNG)
+
 
 
