@@ -256,6 +256,54 @@ function addDep() {
 
 // Add role
 
+function addRole() {
+    let depArray = [];
+
+    promisemysql.createConnection(connectionProperties) .then((connect) => {
+        return connect.query('SELECT id, name FROM department ORDER BY name ASC');
+    }) .then((department) => {
+        for (i=0; i < department.length; i++){
+            depArray.push(department[i].name);
+        }
+        return department;
+    }) .then((department) => {
+        inquirer.prompt([
+            {
+                name: "roleTitle",
+                type: "input",
+                message: "Role title: "
+            },
+            {
+                name: "salary",
+                type: "number",
+                message: "Salary: "
+            },
+            {
+                name: "dpt",
+                type: "list",
+                message: "Department: ",
+                choices: depArray
+            }
+        ]) .then((answer) => {
+            let depID;
+
+            for(i=0; i <department.length; i++) {
+                if (answer.dpt == department[i].name){
+                    depID = department[i].id;
+                }
+            }
+
+            connection.query(`INSERT INTO role (title, salary, department_id
+                VALUES ("${answer.roleTitle}", ${answer.salary}, ${deptID})`, (err, res) => {
+                    if(err) return err;
+                    
+                    console.log(`\n Role ${answer.roleTitle} Added...\n`);
+
+                    mainMenu();
+                });
+        });
+    });
+}
 
 // Add employee
 
