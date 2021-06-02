@@ -597,6 +597,74 @@ function deleteDep() {
 
 // Delete role
 
+function deleteRole(){
+
+    let roleArray = [];
+
+    promisemysql.createConnection(connectionProperties) .then ((connect) => {
+
+        return connect.query("SELECT id, title FROM role");
+    }) .then((role) => {
+
+        for (i=0; i < role.length; i++){
+            roleArray.push(role[i].title);
+        }
+
+        inquirer.prompt([
+            {
+            name: "delete",
+            type: "list",
+            message: "*** WARNING *** Deleting role will delete all employees associated with the role. Do you want to continue?",
+            choices: ["NO", "YES"]
+            }
+        ]) .then((answer) => {
+
+            if (answer.delete === "NO") {
+
+                mainMenu();
+            }
+        }) .then(() => {
+            inquirer.prompt([
+                {
+                name: "role",
+                type: "list",
+                message: "Which role would you like to delete?",
+                choices: roleArray
+                },
+                {
+                name: "delete",
+                type: "Input",
+                message: "Type the EXACT role title to confirm deletion of the role: " 
+                }
+            ]) .then((answer) => {
+
+                if (answer.delete === answer.role) {
+
+                    let roleID;
+
+                    for (i=0; i < role.length; i++){
+                        if (answer.role == role[i].title) {
+                            roleID = role[i].id;
+                        }
+                    }
+
+                    connetion.query(`DELETE FROM role WHERE id=${roleID};`, (err, res) => {
+                        if (err) return err;
+
+                        console.log(`\n Role '${answer.role}' Deleted...\n `);
+
+                        mainMenu();
+                    });
+                }
+                else {
+                    console.log(`\n ROLE '${answer.role}' NOT DELETED...\n `);
+
+                    mainMenu();
+                }
+            });
+        });
+    });
+}
 
 // Delete employee
 
