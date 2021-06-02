@@ -210,7 +210,7 @@ function viewAllByMng() {
         }) .then((answer) => {
             let managerID;
 
-            for (i=0, i <manager.length; i++){
+            for (i=0; i <manager.length; i++) {
                 if (answer.manager == manager[i].manager){
                     managerID = manager[i].id;
                 }
@@ -238,6 +238,21 @@ function viewAllByMng() {
 
 // Add department
 
+function addDep() {
+    inquirer.prompt({
+        name: "department",
+        type: "input",
+        message: "Input department name:"
+    }) .then((answer) => {
+        connection.query(`INSERT INTO department (name)VALUES ("${answer.deptName}");`, (err, res) => {
+            if(err) return err;
+
+            console.log("\n Department Added...\n");
+
+            mainMenu();
+        });
+    });
+}
 
 // Add role
 
