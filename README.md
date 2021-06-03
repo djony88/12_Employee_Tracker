@@ -6,7 +6,7 @@ UCSD-SD-FSF-PT-03-2021-U-C-MW
 
 [GitHub link](https://github.com/djony88/12_Employee_Tracker)
 
-[Preview video]()
+[Preview video](https://drive.google.com/file/d/1lWiKhdWub10Au5sBoURuTdUHuNSyZ3AS/view)
 
 # Requirements:
 
