@@ -244,7 +244,7 @@ function addDep() {
         type: "input",
         message: "Input department name:"
     }) .then((answer) => {
-        connection.query(`INSERT INTO department (name)VALUES ("${answer.deptName}");`, (err, res) => {
+        connection.query(`INSERT INTO department (name)VALUES ("${answer.department}");`, (err, res) => {
             if(err) return err;
 
             console.log("\n Department Added...\n");
@@ -410,7 +410,11 @@ function updateMng() {
         return connect.query("SELECT employee.id, concat(employee.first_name, ' ' ,  employee.last_name) AS Employee FROM employee ORDER BY Employee ASC");
     }) .then ((employee) => {
 
+        console.log(employee)
+
         for (i=0; i < employee.length; i++) {
+            console.log(employee[i].Employee)
+
             empArray.push(employee[i].employee);
         }
 
@@ -537,8 +541,9 @@ function deleteDep() {
 
             return connect.query("SELECT id, name FROM department");
         }) .then((department) => {
+            
             for (i=0; i < department.length; i++){
-                depArray.push(department[i].name);
+                depArray.push({"name":department[i].name, "id":department[i].id});
             }
 
             inquirer.prompt([
@@ -556,7 +561,7 @@ function deleteDep() {
             }) .then(() => {
                 inquirer.prompt([
                 {
-                    name: "depatrtment",
+                    name: "department",
                     type: "list",
                     message: "Which department would you like to delete?",
                     choices: depArray
@@ -564,29 +569,31 @@ function deleteDep() {
                 {
                     name: "delete",
                     type: "Input",
-                    message: "Type the EXACT department name to confirm deletion of the department: "
+                    message: "Type the EXACT department name to confirm deletion of the department:"
                 }
     
             ]) .then((answer) => {
+                
                 if(answer.delete === answer.department){
+                    console.log(depArray)
 
                     let deptID;
-                    for (i=0; i < department.length; i++){
-                        if (answer.department == department[i].name){
-                            deptID = department[i].id;
+                    for (i=0; i < depArray.length; i++){
+                        if (answer.department == depArray[i].name){
+                            deptID = depArray[i].id;
                         }
                     }
 
                     connection.query(`DELETE FROM department WHERE id=${deptID};`, (err, res) => {
                         if(err) return err;
 
-                        console.log(`\n Department '${answer.dept}' Deleted...\n `);
+                        console.log(`\n Department '${answer.department}' Deleted...\n `);
 
                         mainMenu();
                     });
                 }
                 else {
-                    console.log(`\n Department '${answer.dept}' Not deleted...\n `);
+                    console.log(`\n Department '${answer.department}' Not deleted...\n `);
 
                     mainMenu();
                 }
