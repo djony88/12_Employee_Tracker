@@ -410,12 +410,11 @@ function updateMng() {
         return connect.query("SELECT employee.id, concat(employee.first_name, ' ' ,  employee.last_name) AS Employee FROM employee ORDER BY Employee ASC");
     }) .then ((employee) => {
 
-        console.log(employee)
 
         for (i=0; i < employee.length; i++) {
             console.log(employee[i].Employee)
 
-            empArray.push(employee[i].employee);
+            empArray.push(employee[i].Employee);
         }
 
         return employee;
@@ -440,18 +439,18 @@ function updateMng() {
             let managerID;
 
             for (i=0; i < employee.length; i++) {
-                if (answer.manager == employee[i].employee) {
+                if (answer.manager == employee[i].Employee) {
                     managerID = employee[i].id;
                 }
             }
 
             for (i=0; i < employee.length; i++){
-                if (answer.employee == employee[i].employee) {
+                if (answer.employee == employee[i].Employee) {
                     employeeID = employee[i].id;
                 }
             }
 
-            connetion.query(`UPDATE employee SET manager_id = ${managerID} WHERE id = ${employeeID}`, (err, res) => {
+            connection.query(`UPDATE employee SET manager_id = ${managerID} WHERE id = ${employeeID}`, (err, res) => {
                 if(err) return err;
 
                 console.log(`\n ${answer.employee} MANAGER UPDATED TO ${answer.manager}...\n`);
@@ -485,7 +484,7 @@ function updateEmpRole() {
         }
 
         for (i=0; i < employee.length; i++){
-            empArray.push(employee[i].employee);
+            empArray.push(employee[i].Employee);
         }
 
         return Promise.all([role, employee]);
@@ -515,7 +514,7 @@ function updateEmpRole() {
             }
 
             for (i=0; i < employee.length; i++){
-                if (answer.employee == employee[i].employee){
+                if (answer.employee == employee[i].Employee){
                     employeeID = employee[i].id;
                 }
             }
