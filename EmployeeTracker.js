@@ -574,7 +574,6 @@ function deleteDep() {
             ]) .then((answer) => {
                 
                 if(answer.delete === answer.department){
-                    console.log(depArray)
 
                     let deptID;
                     for (i=0; i < depArray.length; i++){
